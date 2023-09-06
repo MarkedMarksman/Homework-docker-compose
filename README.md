@@ -1,15 +1,10 @@
-# Задание 2
-
 # Запуск контейнера:
 
-Заменить при необходимости значение переменных в файле exercise_1/stocks_products/.env
+Запустить
+```docker-compose up -d```
 
-Собрать образ командой
-```docker image build exercise_2/ --tag=crud_morozovs_1```
-
-Запустить контейнер командой
-```docker run --name=crud_morozovs_1 -d -p 7070:7070 crud_morozovs_1```
-
+Проверить
+```curl http://127.0.0.1:8000/api/v1/```
 
 
 # Склады и товары
