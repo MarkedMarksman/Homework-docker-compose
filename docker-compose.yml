@@ -1,0 +1,44 @@
+version: "3.9"
+
+networks:
+  backend:
+
+volumes: 
+  pgdata: 
+
+services:
+  db:
+    container_name: postgredb
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes: 
+      - ./logs:/var/log
+      - pgdata:C:\Program Files\PostgreSQL\15\data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docker_homework_3"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+    networks:
+      - backend
+  django_app:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 --workers 3 stocks_products.wsgi:application
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - db
+    networks: 
+      - backend
+    env_file: 
+      - .env
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks: 
+      - backend 
